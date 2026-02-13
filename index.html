@@ -3,18 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Signal & Static</title>
+    <title>Fault Lines: Signal & Static</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app">
+      <section class="panel" id="start-panel">
+        <h2>Before you begin</h2>
+        <p class="muted">Use a nickname only (no full names). This game runs locally in your browser.</p>
+        <label for="student-alias">Nickname (optional):</label>
+        <input id="student-alias" maxlength="40" placeholder="e.g. TeamBlue-04" />
+        <button id="start-game" type="button">Start Simulation</button>
+      </section>
+
       <header class="hero panel">
-        <p class="eyebrow">Upper Secondary English Simulation</p>
-        <h1>Signal & Static</h1>
+        <p class="eyebrow">Upper Secondary English Crisis Simulation</p>
+        <h1>Fault Lines: Signal & Static</h1>
         <p>
-          You are the student press officer for the Baltic Youth Accord, a climate-and-jobs coalition.
-          In one week, a mistranslated quote and viral rumors threaten to collapse the summit.
-          Your English choices shape what people think you meant.
+          Week of the Youth Climate & Jobs Summit. You are interim Communication Director.
+          Every phrase can calm people, inflame them, or be interpreted in unexpected ways.
         </p>
       </header>
 
@@ -22,12 +29,17 @@
         <article><h3>Clarity</h3><p id="clarity-value">50</p></article>
         <article><h3>Empathy</h3><p id="empathy-value">50</p></article>
         <article><h3>Credibility</h3><p id="credibility-value">50</p></article>
-        <article><h3>Coalition Stability</h3><p id="stability-value">50</p></article>
+        <article><h3>Stability</h3><p id="stability-value">50</p></article>
+      </section>
+
+      <section class="panel progress-wrap" id="progress-wrap">
+        <p id="progress-label">Progress: Day 1 of 6</p>
+        <div class="progress-bar" aria-hidden="true"><span id="progress-fill"></span></div>
       </section>
 
       <section class="panel" id="scene-panel">
         <div class="scene-meta">
-          <span id="round-label">Round 1 of 5</span>
+          <span id="round-label">Day 1 of 6</span>
           <button id="restart" class="ghost" type="button">Restart</button>
         </div>
         <h2 id="scene-title"></h2>
@@ -38,33 +50,77 @@
 
         <div id="options" class="options"></div>
 
+        <section class="panel statement-panel" id="statement-panel">
+          <h3>Write your own line (optional but powerful)</h3>
+          <p id="statement-hint">Write one sentence your spokesperson would say publicly (10–40 words).</p>
+          <textarea id="statement-input" rows="3" maxlength="340" placeholder="Example: We hear your concerns, and we will publish revised wording by 18:00."></textarea>
+          <p id="statement-count">Word count: 0</p>
+        </section>
+
         <section id="feedback" class="feedback hidden" aria-live="polite">
           <h3>Debrief</h3>
           <p id="feedback-text"></p>
           <p id="teaching-note" class="teaching"></p>
-          <button id="continue" type="button">Next Situation</button>
+          <button id="continue" type="button">Continue</button>
         </section>
       </section>
 
-      <section class="panel hidden" id="speech-panel">
-        <h2>Final Broadcast</h2>
+      <section class="panel hidden" id="final-brief-panel">
+        <h2>Final Address</h2>
         <p>
-          Draft a 110–140 word closing statement for international student media.
-          It should reduce fear, stay precise, and invite cooperation.
+          Write a 120–160 word closing statement to international student media.
+          Aim for precision, fairness, and de-escalation.
         </p>
-        <label for="speech-input">Your statement:</label>
+        <label for="speech-input">Your final statement:</label>
         <textarea id="speech-input" rows="8" maxlength="1200"></textarea>
         <p id="word-count">Word count: 0</p>
         <p id="speech-warning" class="warning hidden"></p>
-        <button id="submit-speech" type="button">Publish Statement</button>
+        <button id="submit-speech" type="button">Publish Final Statement</button>
       </section>
 
       <section class="panel hidden" id="ending-panel">
         <h2 id="ending-title"></h2>
         <p id="ending-summary"></p>
-        <h3>What you learned</h3>
+
+        <h3>Language lessons from your run</h3>
         <ul id="lesson-list"></ul>
+
+        <h3>Teacher Export</h3>
+        <p class="muted">
+          Contains all choices, authored statements, scores over time, and final result.
+        </p>
+        <label class="checkbox-row" for="include-alias">
+          <input id="include-alias" type="checkbox" /> Include student nickname in export
+        </label>
+        <div class="teacher-tools">
+          <button id="copy-json" type="button">Copy JSON Report</button>
+          <button id="download-csv" class="ghost" type="button">Download CSV Timeline</button>
+        </div>
+        <p id="export-status" class="muted"></p>
+
         <button id="play-again" type="button">Play Again</button>
+      </section>
+
+      <section class="panel teacher-review" id="teacher-review">
+        <h2>Teacher Review Workspace</h2>
+        <p class="muted">Load multiple JSON exports to compare student outcomes without sending data to a server.</p>
+        <input id="report-files" type="file" accept="application/json,.json" multiple />
+        <p id="review-summary" class="muted"></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Student</th>
+                <th>Clarity</th>
+                <th>Empathy</th>
+                <th>Credibility</th>
+                <th>Stability</th>
+                <th>Ending</th>
+              </tr>
+            </thead>
+            <tbody id="review-body"></tbody>
+          </table>
+        </div>
       </section>
     </main>
 
