@@ -1,16 +1,16 @@
-# Anna's Game — Fault Lines
+# Anna's Game — Signal & Static
 
-A web-based narrative decision game for upper secondary English classes.
+A story-driven web game for 16–18 year olds to practice high-stakes English communication.
 
-## Run locally
+## What it teaches
+
+Students practice:
+- interpreting ambiguity under pressure
+- balancing tone and precision
+- responding to misinformation
+- writing concise public statements
+- reflecting on language trade-offs
+
+## Run
 
 Open `index.html` in a browser.
-
-## Learning focus
-
-Players practice:
-
-- Interpreting ambiguous language
-- Tone awareness
-- Diplomatic writing
-- Evaluating trade-offs in communication

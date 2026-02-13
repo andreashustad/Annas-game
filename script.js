@@ -1,357 +1,369 @@
-const chapters = [
-  {
-    title: "Chapter 1: The Statement",
-    description:
-      'A partner nation says: "We will reconsider our participation if our concerns are not addressed." Your team disagrees on whether this is a threat or normal pressure.',
-    questionTitle: "How will you respond?",
-    questionCopy: "Choose one official response.",
+const lessons = new Set();
+
+const scenes = {
+  briefing: {
+    title: "Opening Briefing",
+    copy: "A quote from your chairperson is translated two ways: 'We expect rapid adaptation.' In one language it sounds like a demand, in another like support. Regional delegates are angry.",
+    promptTitle: "First move: interpretation + response",
+    promptCopy: "Which public line do you release within 20 minutes?",
     options: [
       {
-        id: "A",
-        label: "A. Firm and Defensive",
-        text: "Any withdrawal would severely damage long-term cooperation.",
-        effects: { trust: -12, influence: 10, stability: -4, escalation: 1 },
-        feedback: "You projected authority, but the tone reduced relational trust."
+        label: "A. 'Our message was misread. Everyone knows what we intended.'",
+        result: "You sounded dismissive. Delegates felt blamed for misunderstanding.",
+        teach: "Teaching note: In high-stakes English, intention is less important than reader interpretation.",
+        effects: { clarity: -8, empathy: -12, credibility: -2, stability: -8 },
+        next: "social"
       },
       {
-        id: "B",
-        label: "B. Diplomatic and Open",
-        text: "We welcome further dialogue and seek clarification regarding your concerns.",
-        effects: { trust: 12, influence: 6, stability: 5, escalation: -1 },
-        feedback: "You opened space for nuance and protected momentum in talks."
+        label: "B. 'We regret the wording. We are issuing a clearer statement in all languages today.'",
+        result: "You owned the wording and promised precision. Tension cooled.",
+        teach: "Teaching note: Accountability + specific action builds trust faster than vague apologies.",
+        effects: { clarity: 8, empathy: 9, credibility: 6, stability: 5 },
+        next: "social"
       },
       {
-        id: "C",
-        label: "C. Publicly Neutral",
-        text: "We acknowledge the statement and will continue discussions privately.",
-        effects: { trust: 2, influence: -8, stability: 8, escalation: 0 },
-        feedback: "Short-term calm improved, but your public influence weakened."
-      },
-      {
-        id: "D",
-        label: "D. Strong Warning",
-        text: "Withdrawal would signal unwillingness to uphold shared responsibility.",
-        effects: { trust: -15, influence: 5, stability: -12, escalation: 2 },
-        feedback: "The message escalated tension and hardened positions quickly."
+        label: "C. 'No comment until private talks end.'",
+        result: "Silence prevented immediate escalation but rumors grew.",
+        teach: "Teaching note: Strategic silence can buy time, but creates an information vacuum.",
+        effects: { clarity: -5, empathy: -4, credibility: -3, stability: 2 },
+        next: "social"
       }
     ]
   },
-  {
-    title: "Chapter 2: The Viral Post",
-    description:
-      'A social media post claims the coalition favors foreign economies over local citizens. It is vague, emotional, and spreading fast.',
-    questionTitle: "What communication strategy do you use?",
-    questionCopy: "Select one immediate response.",
+  social: {
+    title: "Signal vs Virality",
+    copy: "A video clip says your coalition will 'sacrifice local jobs'. The clip is edited. Students across three countries start #NotOurFuture.",
+    promptTitle: "How do you answer misinformation?",
+    promptCopy: "Pick one strategy for the next 2 hours.",
     options: [
       {
-        id: "A",
-        label: "A. Ignore it",
-        text: "Focus on official channels only.",
-        effects: { trust: -8, influence: -6, stability: -7, escalation: 1 },
-        feedback: "Silence gave misinformation room to shape the narrative."
+        label: "A. Publish a fact thread with sources, numbers, and definitions.",
+        result: "Journalists and teachers shared your thread. Angry users stayed unconvinced.",
+        teach: "Teaching note: Evidence strengthens credibility, but facts alone rarely calm emotions.",
+        effects: { clarity: 9, empathy: -1, credibility: 8, stability: 4 },
+        next: (state) => (state.empathy < 45 ? "townhall" : "radio")
       },
       {
-        id: "B",
-        label: "B. Fact-Based Rebuttal",
-        text: "Release a clear, evidence-driven statement.",
-        effects: { trust: 6, influence: 8, stability: 4, escalation: -1 },
-        feedback: "Credibility improved, though emotional audiences stayed mixed."
+        label: "B. Publish student stories + one clear data point in each post.",
+        result: "Engagement stayed high, but your message remained grounded and human.",
+        teach: "Teaching note: Strong English communication often combines logos (facts) with pathos (people).",
+        effects: { clarity: 5, empathy: 10, credibility: 4, stability: 7 },
+        next: "radio"
       },
       {
-        id: "C",
-        label: "C. Emotional Counter-Narrative",
-        text: "Use personal stories to shift sentiment.",
-        effects: { trust: 8, influence: 4, stability: 1, escalation: 0 },
-        feedback: "Engagement rose and empathy grew, with some loss of nuance."
-      },
-      {
-        id: "D",
-        label: "D. Directly Confront",
-        text: "Call the post misleading and irresponsible.",
-        effects: { trust: -6, influence: 5, stability: -8, escalation: 2 },
-        feedback: "Supporters rallied, but polarization intensified."
+        label: "C. Attack the original creator as irresponsible.",
+        result: "Supporters cheered, but opponents doubled down and reframed you as arrogant.",
+        teach: "Teaching note: Personal attacks shift focus from claim quality to conflict identity.",
+        effects: { clarity: -4, empathy: -8, credibility: -3, stability: -10 },
+        next: "townhall"
       }
     ]
   },
-  {
-    title: "Chapter 3: Cultural Misstep",
-    description:
-      'Your speech included: "We expect developing regions to adapt quickly." Regional partners call it dismissive.',
-    questionTitle: "How do you respond?",
-    questionCopy: "Choose one corrective message.",
+  townhall: {
+    title: "Emergency Town Hall",
+    copy: "A live town hall is requested by student unions. Questions are emotional and interrupted by sarcasm.",
+    promptTitle: "Choose your speaking style",
+    promptCopy: "Which sentence opener do you use repeatedly?",
     options: [
       {
-        id: "A",
-        label: "A. Defend Wording",
-        text: "Clarify intent without apologizing.",
-        effects: { trust: -12, influence: 7, stability: -6, escalation: 1 },
-        feedback: "You preserved authority, but offense remained unresolved."
+        label: "A. 'Let me be crystal clear: you're wrong about our intentions.'",
+        result: "You sounded sharp and organized, but many felt dismissed.",
+        teach: "Teaching note: 'Clear' language can still be face-threatening if tone is adversarial.",
+        effects: { clarity: 4, empathy: -10, credibility: 2, stability: -7 },
+        next: "internal"
       },
       {
-        id: "B",
-        label: "B. Partial Apology",
-        text: "Acknowledge misunderstanding while adding context.",
-        effects: { trust: 7, influence: 4, stability: 5, escalation: -1 },
-        feedback: "You balanced accountability with strategic positioning."
+        label: "B. 'I hear why that sounds unfair; let me explain the full context.'",
+        result: "The room remained tense but you regained listening space.",
+        teach: "Teaching note: Validation phrases reduce defensiveness and improve comprehension.",
+        effects: { clarity: 6, empathy: 8, credibility: 5, stability: 6 },
+        next: "internal"
       },
       {
-        id: "C",
-        label: "C. Full Apology",
-        text: "Take responsibility and revise the language.",
-        effects: { trust: 12, influence: -5, stability: 8, escalation: -1 },
-        feedback: "Trust recovered strongly, though some saw softer influence."
-      },
-      {
-        id: "D",
-        label: "D. Redirect",
-        text: "Refocus on shared goals, not phrasing.",
-        effects: { trust: -3, influence: 2, stability: 3, escalation: 0 },
-        feedback: "You delayed open conflict, but lingering resentment remains."
+        label: "C. 'We don't have time for every concern right now.'",
+        result: "You shortened the meeting but amplified resentment.",
+        teach: "Teaching note: Time-pressure language can imply some voices matter less.",
+        effects: { clarity: -2, empathy: -9, credibility: -5, stability: -8 },
+        next: "internal"
       }
     ]
   },
-  {
-    title: "Chapter 4: Internal Conflict",
-    description:
-      "Coalition members disagree publicly. Some demand hard rhetoric, others want caution. Your memo must set the line.",
-    questionTitle: "What is your core message?",
-    questionCopy: "Pick one memo direction.",
+  radio: {
+    title: "Live Radio Interview",
+    copy: "A national radio host asks a loaded question: 'Is your coalition forcing poorer regions to pay for your image?'",
+    promptTitle: "Choose your 1-sentence answer",
+    promptCopy: "Which sentence best protects meaning under pressure?",
     options: [
       {
-        id: "A",
-        label: "A. We must stand firm.",
-        text: "Direct + Assertive + Strategic",
-        effects: { trust: -6, influence: 9, stability: -8, escalation: 1 },
-        feedback: "External resolve increased, but internal cohesion weakened."
+        label: "A. 'That's a false question and frankly unfair.'",
+        result: "You challenged framing but sounded combative.",
+        teach: "Teaching note: Reframing beats rebuttal when questions carry hidden assumptions.",
+        effects: { clarity: 1, empathy: -6, credibility: -1, stability: -5 },
+        next: "internal"
       },
       {
-        id: "B",
-        label: "B. We must compromise.",
-        text: "Diplomatic + Collaborative + Transparent",
-        effects: { trust: 6, influence: -4, stability: 7, escalation: -1 },
-        feedback: "Team alignment improved, with some loss in negotiating edge."
+        label: "B. 'No—our plan pairs climate targets with a youth jobs fund monitored by local councils.'",
+        result: "You replaced accusation with concrete policy language.",
+        teach: "Teaching note: Specific nouns and verbs prevent ambiguity better than abstract promises.",
+        effects: { clarity: 10, empathy: 3, credibility: 8, stability: 5 },
+        next: "internal"
       },
       {
-        id: "C",
-        label: "C. We must prioritize unity.",
-        text: "Diplomatic + Collaborative + Strategic",
-        effects: { trust: 5, influence: 1, stability: 8, escalation: -1 },
-        feedback: "Short-term stability improved, though hard decisions were delayed."
+        label: "C. 'Everyone is making sacrifices, so criticism is expected.'",
+        result: "Your point was realistic, but detached.",
+        teach: "Teaching note: Generalizations can sound logical but erase audience perspective.",
+        effects: { clarity: 2, empathy: -5, credibility: 1, stability: -2 },
+        next: "internal"
+      }
+    ]
+  },
+  internal: {
+    title: "Internal Split",
+    copy: "Your own coalition divides: one group wants hard language, another wants cautious diplomacy. Your memo must prevent a public fracture.",
+    promptTitle: "Select memo core",
+    promptCopy: "Which line leads your memo?",
+    options: [
+      {
+        label: "A. 'Discipline first: one message, no public disagreement.'",
+        result: "Coordination improved, but some members felt silenced.",
+        teach: "Teaching note: Directive tone can increase efficiency while reducing psychological safety.",
+        effects: { clarity: 6, empathy: -6, credibility: 4, stability: -2 },
+        next: "speech"
       },
       {
-        id: "D",
-        label: "D. We must reassess entirely.",
-        text: "Transparent reset of strategy",
-        effects: { trust: 2, influence: -6, stability: -2, escalation: 0 },
-        feedback: "The reset created reflection but signaled uncertainty externally."
+        label: "B. 'Unity requires disagreement handled with evidence, not accusation.'",
+        result: "You set standards for language, not loyalty tests.",
+        teach: "Teaching note: Process language ('how we discuss') often lowers conflict better than position language ('what to think').",
+        effects: { clarity: 7, empathy: 7, credibility: 6, stability: 9 },
+        next: "speech"
+      },
+      {
+        label: "C. 'Pause all messaging until leadership resolves strategy.'",
+        result: "You avoided fresh conflict but looked uncertain externally.",
+        teach: "Teaching note: Delays can reduce short-term mistakes while eroding narrative control.",
+        effects: { clarity: -4, empathy: 1, credibility: -7, stability: 1 },
+        next: "speech"
       }
     ]
   }
-];
-
-const state = {
-  chapterIndex: 0,
-  trust: 50,
-  influence: 50,
-  stability: 50,
-  escalation: 0,
-  speech: "",
-  choices: []
 };
 
-const chapterLabel = document.getElementById("chapter-label");
-const chapterTitle = document.getElementById("chapter-title");
-const chapterDescription = document.getElementById("chapter-description");
-const questionTitle = document.getElementById("question-title");
-const questionCopy = document.getElementById("question-copy");
+const state = {
+  round: 1,
+  sceneId: "briefing",
+  clarity: 50,
+  empathy: 50,
+  credibility: 50,
+  stability: 50,
+  speech: ""
+};
+
+const roundLabel = document.getElementById("round-label");
+const sceneTitle = document.getElementById("scene-title");
+const sceneCopy = document.getElementById("scene-copy");
+const promptTitle = document.getElementById("prompt-title");
+const promptCopy = document.getElementById("prompt-copy");
 const optionsWrap = document.getElementById("options");
-const feedbackWrap = document.getElementById("chapter-feedback");
-const feedbackCopy = document.getElementById("feedback-copy");
-const continueButton = document.getElementById("continue-button");
-const gamePanel = document.getElementById("game-panel");
-const endingPanel = document.getElementById("ending-panel");
+const feedback = document.getElementById("feedback");
+const feedbackText = document.getElementById("feedback-text");
+const teachingNote = document.getElementById("teaching-note");
+const continueBtn = document.getElementById("continue");
+const restartBtn = document.getElementById("restart");
+
+const scenePanel = document.getElementById("scene-panel");
 const speechPanel = document.getElementById("speech-panel");
-const restartButton = document.getElementById("restart-button");
-const playAgainButton = document.getElementById("play-again");
+const endingPanel = document.getElementById("ending-panel");
+
 const speechInput = document.getElementById("speech-input");
-const submitSpeech = document.getElementById("submit-speech");
+const wordCount = document.getElementById("word-count");
 const speechWarning = document.getElementById("speech-warning");
-const wordCountLabel = document.getElementById("word-count");
+const submitSpeech = document.getElementById("submit-speech");
+const playAgain = document.getElementById("play-again");
+
+const metrics = {
+  clarity: document.getElementById("clarity-value"),
+  empathy: document.getElementById("empathy-value"),
+  credibility: document.getElementById("credibility-value"),
+  stability: document.getElementById("stability-value")
+};
+
+let pendingNext = null;
 
 function clamp(value) {
   return Math.max(0, Math.min(100, value));
 }
 
-function getWordCount(text) {
-  const trimmed = text.trim();
-  if (!trimmed) return 0;
-  return trimmed.split(/\s+/).length;
+function words(text) {
+  const t = text.trim();
+  return t ? t.split(/\s+/).length : 0;
 }
 
-function renderChapter() {
-  const chapter = chapters[state.chapterIndex];
-  chapterLabel.textContent = `Chapter ${state.chapterIndex + 1} of 5`;
-  chapterTitle.textContent = chapter.title;
-  chapterDescription.textContent = chapter.description;
-  questionTitle.textContent = chapter.questionTitle;
-  questionCopy.textContent = chapter.questionCopy;
-  optionsWrap.innerHTML = "";
-  feedbackWrap.classList.add("hidden");
-
-  chapter.options.forEach((option) => {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "option-btn";
-    button.innerHTML = `<strong>${option.label}</strong><br>${option.text}`;
-    button.addEventListener("click", () => handleChoice(option));
-    optionsWrap.appendChild(button);
+function paintHud() {
+  Object.keys(metrics).forEach((key) => {
+    metrics[key].textContent = String(state[key]);
   });
 }
 
-function handleChoice(option) {
-  state.trust = clamp(state.trust + option.effects.trust);
-  state.influence = clamp(state.influence + option.effects.influence);
-  state.stability = clamp(state.stability + option.effects.stability);
-  state.escalation = Math.max(0, state.escalation + option.effects.escalation);
-  state.choices.push(option.label);
+function renderScene() {
+  const scene = scenes[state.sceneId];
+  roundLabel.textContent = `Round ${state.round} of 5`;
+  sceneTitle.textContent = scene.title;
+  sceneCopy.textContent = scene.copy;
+  promptTitle.textContent = scene.promptTitle;
+  promptCopy.textContent = scene.promptCopy;
+  optionsWrap.innerHTML = "";
+  feedback.classList.add("hidden");
 
-  feedbackCopy.textContent = option.feedback;
-  feedbackWrap.classList.remove("hidden");
+  scene.options.forEach((option) => {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "option";
+    btn.textContent = option.label;
+    btn.addEventListener("click", () => choose(option));
+    optionsWrap.appendChild(btn);
+  });
+
+  paintHud();
+}
+
+function applyEffects(effects) {
+  Object.entries(effects).forEach(([key, change]) => {
+    state[key] = clamp(state[key] + change);
+  });
+}
+
+function choose(option) {
+  applyEffects(option.effects);
+  feedbackText.textContent = option.result;
+  teachingNote.textContent = option.teach;
+  feedback.classList.remove("hidden");
+
+  lessons.add(option.teach.replace("Teaching note: ", ""));
+  pendingNext = typeof option.next === "function" ? option.next(state) : option.next;
 
   [...optionsWrap.children].forEach((btn) => {
     btn.disabled = true;
     btn.style.opacity = "0.65";
   });
+
+  paintHud();
 }
 
 function nextStep() {
-  state.chapterIndex += 1;
-  if (state.chapterIndex < chapters.length) {
-    renderChapter();
-  } else {
-    openSpeechChapter();
+  if (!pendingNext) return;
+  if (pendingNext === "speech") {
+    scenePanel.classList.add("hidden");
+    speechPanel.classList.remove("hidden");
+    wordCount.textContent = `Word count: ${words(speechInput.value)}`;
+    return;
   }
-}
 
-function openSpeechChapter() {
-  gamePanel.classList.add("hidden");
-  speechPanel.classList.remove("hidden");
-  speechInput.value = state.speech;
-  wordCountLabel.textContent = `Word count: ${getWordCount(state.speech)}`;
+  state.sceneId = pendingNext;
+  state.round += 1;
+  pendingNext = null;
+  renderScene();
 }
 
 function evaluateSpeech(text) {
   const lower = text.toLowerCase();
-  const cooperationWords = ["together", "cooperate", "shared", "partnership", "listen"];
-  const empathyWords = ["understand", "respect", "concern", "community", "youth"];
-  const tensionWords = ["threat", "punish", "blame", "enemy", "fight"];
+  const precise = ["according to", "data", "timeline", "monitor", "fund", "report"];
+  const bridge = ["together", "listen", "shared", "respect", "community", "cooperate"];
+  const inflammatory = ["enemy", "betray", "punish", "shame", "liar"];
 
-  const hasCooperation = cooperationWords.some((word) => lower.includes(word));
-  const hasEmpathy = empathyWords.some((word) => lower.includes(word));
-  const hostileCount = tensionWords.filter((word) => lower.includes(word)).length;
-
-  if (hasCooperation) state.stability = clamp(state.stability + 6);
-  if (hasEmpathy) state.trust = clamp(state.trust + 6);
-  if (hostileCount > 1) {
-    state.trust = clamp(state.trust - 8);
-    state.stability = clamp(state.stability - 7);
-    state.escalation += 1;
+  if (precise.some((word) => lower.includes(word))) state.clarity = clamp(state.clarity + 6);
+  if (bridge.some((word) => lower.includes(word))) state.empathy = clamp(state.empathy + 6);
+  if (inflammatory.filter((word) => lower.includes(word)).length > 0) {
+    state.stability = clamp(state.stability - 9);
+    state.credibility = clamp(state.credibility - 4);
   } else {
-    state.influence = clamp(state.influence + 4);
+    state.credibility = clamp(state.credibility + 4);
   }
 }
 
-function determineEnding() {
-  if (state.trust >= 68 && state.stability >= 68) {
+function ending() {
+  const avg = (state.clarity + state.empathy + state.credibility + state.stability) / 4;
+  if (state.empathy > 68 && state.stability > 66) {
     return {
-      title: "Ending 1: Cooperative Breakthrough",
-      summary:
-        "Your precise and empathetic communication rebuilt bridges. A revised treaty passes through negotiation, and your coalition is praised for measured leadership."
+      title: "Ending: Bridge Builders",
+      summary: "Your language de-escalated conflict. Student groups return to negotiation, and your coalition keeps both legitimacy and momentum."
     };
   }
-
-  if (state.influence >= 70 && state.trust < 55) {
+  if (state.clarity > 72 && state.credibility > 70 && state.empathy < 50) {
     return {
-      title: "Ending 2: Controlled but Cold",
-      summary:
-        "You held the line and delivered results, but public confidence stayed fractured. The agreement survives, yet relationships remain tense and transactional."
+      title: "Ending: Correct but Distant",
+      summary: "Your messages were precise and trusted by institutions, but many students felt unheard. The agreement survives with low enthusiasm."
     };
   }
-
-  if (state.trust < 42 && state.escalation >= 3) {
+  if (state.stability < 45 || avg < 48) {
     return {
-      title: "Ending 4: Polarized World",
-      summary:
-        "Language hardened divisions and outrage eclipsed diplomacy. Debate became performance, and coalition trust collapsed across regions."
+      title: "Ending: Fracture Week",
+      summary: "Rhetoric outpaced listening. Delegates split publicly, and short clips replaced serious dialogue."
     };
   }
-
-  if (state.stability < 48) {
-    return {
-      title: "Ending 3: Fragmented Alliance",
-      summary:
-        "Misalignment and unresolved rhetoric pushed members apart. The coalition splintered as partners withdrew from a process they no longer trusted."
-    };
-  }
-
   return {
-    title: "Conditional Outcome: Uneasy Pause",
-    summary:
-      "You prevented collapse, but core disagreements remain. The world watches whether your next words build momentum—or reopen fault lines."
+    title: "Ending: Uneasy Holding Pattern",
+    summary: "You prevented collapse and kept channels open, but unresolved language tensions remain before the final treaty vote."
   };
 }
 
-function renderEnding() {
-  const ending = determineEnding();
-  document.getElementById("ending-title").textContent = ending.title;
-  document.getElementById("ending-summary").textContent = ending.summary;
-  document.getElementById("final-trust").textContent = `${state.trust}/100`;
-  document.getElementById("final-influence").textContent = `${state.influence}/100`;
-  document.getElementById("final-stability").textContent = `${state.stability}/100`;
-  document.getElementById("speech-result").textContent = state.speech;
+function showEnding() {
+  const end = ending();
+  document.getElementById("ending-title").textContent = end.title;
+  document.getElementById("ending-summary").textContent = end.summary;
+
+  const list = document.getElementById("lesson-list");
+  list.innerHTML = "";
+  [...lessons].slice(0, 6).forEach((item) => {
+    const li = document.createElement("li");
+    li.textContent = item;
+    list.appendChild(li);
+  });
 
   speechPanel.classList.add("hidden");
   endingPanel.classList.remove("hidden");
+  paintHud();
 }
 
-function resetGame() {
-  state.chapterIndex = 0;
-  state.trust = 50;
-  state.influence = 50;
+function reset() {
+  state.round = 1;
+  state.sceneId = "briefing";
+  state.clarity = 50;
+  state.empathy = 50;
+  state.credibility = 50;
   state.stability = 50;
-  state.escalation = 0;
   state.speech = "";
-  state.choices = [];
+  pendingNext = null;
+  lessons.clear();
 
-  endingPanel.classList.add("hidden");
-  speechPanel.classList.add("hidden");
-  gamePanel.classList.remove("hidden");
+  speechInput.value = "";
   speechWarning.classList.add("hidden");
-  renderChapter();
+  scenePanel.classList.remove("hidden");
+  speechPanel.classList.add("hidden");
+  endingPanel.classList.add("hidden");
+  renderScene();
 }
 
-continueButton.addEventListener("click", nextStep);
-restartButton.addEventListener("click", resetGame);
-playAgainButton.addEventListener("click", resetGame);
+continueBtn.addEventListener("click", nextStep);
+restartBtn.addEventListener("click", reset);
+playAgain.addEventListener("click", reset);
 
 speechInput.addEventListener("input", () => {
-  const count = getWordCount(speechInput.value);
-  wordCountLabel.textContent = `Word count: ${count}`;
+  wordCount.textContent = `Word count: ${words(speechInput.value)}`;
   speechWarning.classList.add("hidden");
 });
 
 submitSpeech.addEventListener("click", () => {
   const text = speechInput.value.trim();
-  const count = getWordCount(text);
-  if (count < 120 || count > 150) {
-    speechWarning.textContent = "Your speech must be between 120 and 150 words.";
+  const count = words(text);
+  if (count < 110 || count > 140) {
+    speechWarning.textContent = "Use 110–140 words so your statement is concise but developed.";
     speechWarning.classList.remove("hidden");
     return;
   }
 
   state.speech = text;
   evaluateSpeech(text);
-  renderEnding();
+  showEnding();
 });
 
-renderChapter();
+renderScene();

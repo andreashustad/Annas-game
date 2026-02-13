@@ -3,82 +3,68 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Fault Lines</title>
+    <title>Signal & Static</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main class="app">
-      <header class="hero">
-        <p class="eyebrow">Upper Secondary English Communication Game</p>
-        <h1>Fault Lines</h1>
+      <header class="hero panel">
+        <p class="eyebrow">Upper Secondary English Simulation</p>
+        <h1>Signal & Static</h1>
         <p>
-          You are the new Communication Director for an international youth
-          coalition. Every sentence you publish can calm tensions—or split
-          alliances.
+          You are the student press officer for the Baltic Youth Accord, a climate-and-jobs coalition.
+          In one week, a mistranslated quote and viral rumors threaten to collapse the summit.
+          Your English choices shape what people think you meant.
         </p>
       </header>
 
-      <section class="panel" id="game-panel">
-        <div class="chapter-meta">
-          <span id="chapter-label">Chapter 1 of 5</span>
-          <button id="restart-button" class="ghost" type="button">Restart</button>
+      <section class="panel hud" id="hud">
+        <article><h3>Clarity</h3><p id="clarity-value">50</p></article>
+        <article><h3>Empathy</h3><p id="empathy-value">50</p></article>
+        <article><h3>Credibility</h3><p id="credibility-value">50</p></article>
+        <article><h3>Coalition Stability</h3><p id="stability-value">50</p></article>
+      </section>
+
+      <section class="panel" id="scene-panel">
+        <div class="scene-meta">
+          <span id="round-label">Round 1 of 5</span>
+          <button id="restart" class="ghost" type="button">Restart</button>
         </div>
+        <h2 id="scene-title"></h2>
+        <p id="scene-copy"></p>
 
-        <h2 id="chapter-title"></h2>
-        <p id="chapter-description"></p>
+        <h3 id="prompt-title"></h3>
+        <p id="prompt-copy"></p>
 
-        <div id="question-wrapper">
-          <h3 id="question-title"></h3>
-          <p id="question-copy"></p>
-          <div id="options" class="options"></div>
-        </div>
+        <div id="options" class="options"></div>
 
-        <section id="chapter-feedback" class="feedback hidden" aria-live="polite">
-          <h3>Impact</h3>
-          <p id="feedback-copy"></p>
-          <button id="continue-button" type="button">Continue</button>
+        <section id="feedback" class="feedback hidden" aria-live="polite">
+          <h3>Debrief</h3>
+          <p id="feedback-text"></p>
+          <p id="teaching-note" class="teaching"></p>
+          <button id="continue" type="button">Next Situation</button>
         </section>
+      </section>
+
+      <section class="panel hidden" id="speech-panel">
+        <h2>Final Broadcast</h2>
+        <p>
+          Draft a 110–140 word closing statement for international student media.
+          It should reduce fear, stay precise, and invite cooperation.
+        </p>
+        <label for="speech-input">Your statement:</label>
+        <textarea id="speech-input" rows="8" maxlength="1200"></textarea>
+        <p id="word-count">Word count: 0</p>
+        <p id="speech-warning" class="warning hidden"></p>
+        <button id="submit-speech" type="button">Publish Statement</button>
       </section>
 
       <section class="panel hidden" id="ending-panel">
         <h2 id="ending-title"></h2>
         <p id="ending-summary"></p>
-        <div class="stats-grid">
-          <article>
-            <h3>Trust</h3>
-            <p id="final-trust"></p>
-          </article>
-          <article>
-            <h3>Influence</h3>
-            <p id="final-influence"></p>
-          </article>
-          <article>
-            <h3>Stability</h3>
-            <p id="final-stability"></p>
-          </article>
-        </div>
-
-        <h3>Your Global Address</h3>
-        <p id="speech-result"></p>
+        <h3>What you learned</h3>
+        <ul id="lesson-list"></ul>
         <button id="play-again" type="button">Play Again</button>
-      </section>
-
-      <section class="panel prompt-panel hidden" id="speech-panel">
-        <h2>Chapter 5: The Global Address</h2>
-        <p>
-          Write a 120–150 word speech to reduce tension, inspire cooperation,
-          and protect coalition credibility.
-        </p>
-        <label for="speech-input">Draft your speech:</label>
-        <textarea
-          id="speech-input"
-          rows="8"
-          maxlength="1200"
-          placeholder="Start your speech here..."
-        ></textarea>
-        <p id="word-count">Word count: 0</p>
-        <button id="submit-speech" type="button">Submit Address</button>
-        <p id="speech-warning" class="warning hidden"></p>
       </section>
     </main>
 
