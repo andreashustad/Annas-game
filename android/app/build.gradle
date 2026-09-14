@@ -1,0 +1,42 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'com.annasgames.globesweeper'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId "com.annasgames.globesweeper"
+        minSdk 24
+        targetSdk 34
+        versionCode 1
+        versionName "1.0"
+    }
+
+    /* The game itself is not copied into the project: the web app directory is
+     * pulled straight in as assets, so there is only ever one copy of it. */
+    sourceSets {
+        main {
+            assets.srcDirs += ['../../globesweeper']
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+dependencies {
+    /* WebViewAssetLoader serves the assets over a real https origin, so
+     * localStorage (settings, records) behaves exactly as it does in a
+     * browser. Loading from file:// does not reliably give you that. */
+    implementation 'androidx.webkit:webkit:1.11.0'
+}

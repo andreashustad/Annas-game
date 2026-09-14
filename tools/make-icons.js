@@ -154,7 +154,9 @@ function renderIcon(size, opts) {
       const halo = Math.max(0, 1 - (Math.sqrt(r2) - 1) / 0.55) * 0.5;
       bg = [bg[0] + 60 * halo, bg[1] + 100 * halo, bg[2] + 160 * halo];
     }
-    if (r2 > 1) return [bg[0], bg[1], bg[2], 255];
+    if (r2 > 1) {
+      return opts.transparent ? [0, 0, 0, 0] : [bg[0], bg[1], bg[2], 255];
+    }
 
     const z = Math.sqrt(1 - r2);
     const nx = dx, ny = -dy, nz = z;
@@ -203,18 +205,28 @@ function flagLocal(nx, ny, nz, dir) {
   };
 }
 
-const outDir = path.join(__dirname, '..', 'globesweeper', 'icons');
-fs.mkdirSync(outDir, { recursive: true });
+const webDir = path.join(__dirname, '..', 'globesweeper', 'icons');
+const androidRes = path.join(__dirname, '..', 'android', 'app', 'src', 'main', 'res');
 
 const jobs = [
-  { file: 'icon-192.png', size: 192, maskable: false },
-  { file: 'icon-512.png', size: 512, maskable: false },
-  { file: 'icon-maskable-512.png', size: 512, maskable: true },
-  { file: 'apple-touch-icon.png', size: 180, maskable: false }
+  { file: path.join(webDir, 'icon-192.png'), size: 192 },
+  { file: path.join(webDir, 'icon-512.png'), size: 512 },
+  { file: path.join(webDir, 'icon-maskable-512.png'), size: 512, maskable: true },
+  { file: path.join(webDir, 'apple-touch-icon.png'), size: 180 },
+  /* Android launcher icons: legacy bitmaps per density, plus the foreground
+   * layer of the adaptive icon (globe only, on transparency). */
+  { file: path.join(androidRes, 'mipmap-mdpi', 'ic_launcher.png'), size: 48 },
+  { file: path.join(androidRes, 'mipmap-hdpi', 'ic_launcher.png'), size: 72 },
+  { file: path.join(androidRes, 'mipmap-xhdpi', 'ic_launcher.png'), size: 96 },
+  { file: path.join(androidRes, 'mipmap-xxhdpi', 'ic_launcher.png'), size: 144 },
+  { file: path.join(androidRes, 'mipmap-xxxhdpi', 'ic_launcher.png'), size: 192 },
+  { file: path.join(androidRes, 'drawable', 'ic_launcher_foreground.png'), size: 432, maskable: true, transparent: true }
 ];
 
 for (const job of jobs) {
   const png = renderIcon(job.size, job);
-  fs.writeFileSync(path.join(outDir, job.file), png);
-  console.log('wrote', job.file, '(' + job.size + 'px, ' + (png.length / 1024).toFixed(1) + ' KB)');
+  fs.mkdirSync(path.dirname(job.file), { recursive: true });
+  fs.writeFileSync(job.file, png);
+  console.log('wrote', path.relative(path.join(__dirname, '..'), job.file),
+    '(' + job.size + 'px, ' + (png.length / 1024).toFixed(1) + ' KB)');
 }

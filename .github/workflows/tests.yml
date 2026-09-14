@@ -18,4 +18,4 @@ jobs:
       - name: Check the app icons are up to date
         run: |
           node tools/make-icons.js
-          git diff --exit-code -- globesweeper/icons
+          git diff --exit-code -- globesweeper/icons android/app/src/main/res

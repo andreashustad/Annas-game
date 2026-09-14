@@ -29,19 +29,39 @@ screen and runs completely offline.
 
 Open `index.html` — no build step, no dependencies.
 
-For the service worker (offline install) you need it served over HTTP rather
+For the service worker (offline install) it needs to be served over HTTP rather
 than opened from disk:
 
 ```sh
 npx http-server . -p 8080     # then open http://localhost:8080/globesweeper/
 ```
 
-### Install on Android
+## Getting it onto a phone
 
-Open the page in Chrome, then **⋮ → Add to Home screen**. It installs as a
-standalone app with its own icon, launches without browser chrome, and works in
-aeroplane mode. Long-press the icon for shortcuts straight into the daily
-challenge or a new game.
+**As an installed web app.** Turn on GitHub Pages for this repository
+(Settings → Pages → *Deploy from a branch*, `main`, `/`), then open
+`https://<user>.github.io/<repo>/globesweeper/` in Chrome on the phone and
+choose **⋮ → Add to Home screen**. It installs with its own icon, launches
+without browser chrome, and works in aeroplane mode from then on. Long-press
+the icon for shortcuts straight into the daily challenge or a new game.
+
+**As an APK.** [`../android/`](../android) is an Android Studio project that
+wraps the same files in a native shell — one WebView, no permissions at all
+(not even `INTERNET`), assets served through `WebViewAssetLoader` so the game
+gets a proper secure origin for its saved settings and records. The web app is
+pulled in from `globesweeper/` by the Gradle build rather than copied, so there
+is only ever one copy of the game.
+
+```sh
+# Open android/ in Android Studio and let it sync (it supplies the Gradle
+# wrapper), then:
+./gradlew assembleDebug        # app/build/outputs/apk/debug/app-debug.apk
+adb install -r app/build/outputs/apk/debug/app-debug.apk
+```
+
+This environment has no Android SDK, so unlike the rest of the project the
+Gradle build is the one part that has not been run here — expect Android Studio
+to want to adjust the AGP or Gradle version to match your install.
 
 ## Controls
 
@@ -116,5 +136,6 @@ js/storage.js           settings, records, daily history
 js/main.js              menus, HUD, game loop
 ```
 
-`../tools/make-icons.js` renders the app icons — the globe in them is the real
-board geometry, so the icon cannot drift out of sync with the game.
+`../tools/make-icons.js` renders every icon — web, Apple touch, and the Android
+launcher set including the adaptive-icon foreground. The globe in them is the
+real board geometry, so the icons cannot drift out of sync with the game.

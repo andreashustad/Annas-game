@@ -13,7 +13,8 @@ Every board is verified guess-free by a built-in solver before you see it, hints
 explain their own reasoning, and it installs to an Android home screen and runs
 fully offline.
 
-[**Play →**](globesweeper/index.html) · [Read more →](globesweeper/README.md)
+[**Play →**](globesweeper/index.html) · [Read more →](globesweeper/README.md) ·
+[Put it on a phone →](globesweeper/README.md#getting-it-onto-a-phone)
 
 ![Globesweeper](globesweeper/docs/screenshot-board.png)
 
@@ -37,6 +38,7 @@ node tests/run.js
 ```
 index.html script.js styles.css   Signal & Static
 globesweeper/                     Globesweeper (see its own README)
+android/                          Android Studio project wrapping Globesweeper
 tests/run.js                      test suite
 tools/make-icons.js               renders Globesweeper's app icons
 ```
